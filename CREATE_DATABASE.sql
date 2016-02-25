@@ -1,3 +1,4 @@
+
 CREATE EXTENSION postgis;
 
 CREATE TABLE catchments (gid int, CONSTRAINT gid_PK PRIMARY KEY(gid));
