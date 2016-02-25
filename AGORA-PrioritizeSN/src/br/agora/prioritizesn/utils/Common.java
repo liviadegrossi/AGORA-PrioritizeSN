@@ -1,4 +1,4 @@
-package br.agora.dsm.utils;
+package br.agora.prioritizesn.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;

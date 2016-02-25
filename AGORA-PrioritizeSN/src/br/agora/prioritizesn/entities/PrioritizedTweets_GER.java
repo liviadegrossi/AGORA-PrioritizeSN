@@ -1,4 +1,4 @@
-package br.agora.dsm.entities;
+package br.agora.prioritizesn.entities;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import br.agora.prioritizesn.utils.Common;
 import twitter4j.FilterQuery;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -18,7 +19,6 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
-import br.agora.dsm.utils.Common;
 
 public class PrioritizedTweets_GER extends HttpServlet
 {

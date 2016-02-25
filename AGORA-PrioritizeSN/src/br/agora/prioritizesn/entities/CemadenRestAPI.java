@@ -1,4 +1,4 @@
-package br.agora.dsm.entities;
+package br.agora.prioritizesn.entities;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import br.agora.dsm.utils.Common;
+import br.agora.prioritizesn.utils.Common;
 
 public class CemadenRestAPI extends HttpServlet
 {

@@ -1,4 +1,4 @@
-package br.agora.dsm.entities;
+package br.agora.prioritizesn.entities;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import br.agora.dsm.utils.Common;
+import br.agora.prioritizesn.utils.Common;
 
 public class PegelonlineRestAPI extends HttpServlet
 {
@@ -311,9 +311,9 @@ public class PegelonlineRestAPI extends HttpServlet
 								// define station name						
 								URL_name_station = sensor.get("shortname").toString();
 								URL_encoded = URL_name_station.replaceAll(" ", "%20");
-								URL_encoded = URL_encoded.replaceAll("Ü", "%C3%BC");
-								URL_encoded = URL_encoded.replaceAll("Ö", "%C3%B6");
-								URL_encoded = URL_encoded.replaceAll("Ä", "%C3%A4");
+								URL_encoded = URL_encoded.replaceAll("ï¿½", "%C3%BC");
+								URL_encoded = URL_encoded.replaceAll("ï¿½", "%C3%B6");
+								URL_encoded = URL_encoded.replaceAll("ï¿½", "%C3%A4");
 								URL_encoded = URL_encoded.replaceAll("-", "%2D");								
 								
 								//System.out.println("shortname begin: "+URL_name_station);

@@ -1,4 +1,4 @@
-package br.agora.dsm.entities;
+package br.agora.prioritizesn.entities;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import br.agora.prioritizesn.utils.Common;
 import twitter4j.FilterQuery;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -16,9 +17,8 @@ import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
-import br.agora.dsm.utils.Common;
 
-public class CollectTweetsBRA extends HttpServlet 
+public class CollectTweetsGER extends HttpServlet 
 {
 	
 	/**
@@ -50,14 +50,16 @@ public class CollectTweetsBRA extends HttpServlet
 			
 	        @Override
 			public void onStatus(Status status) {
-	        		        	
+	        	   	
+     
 	            try {    				            	
 	    			
-	            	if (status.getGeoLocation() != null) {	  
+	            	if (status.getGeoLocation() != null) 
+	            	{	  
 	            		
 	            		/* ****************** PERFORMANCE TRACKING ****************** */
 	    				long middlSt =  System.nanoTime();
-	         
+	    				
 	            		// removing special characters of the status text in order to store into the database
 		    			String statusText = status.getText().replaceAll("'", " ");
 		    			
@@ -66,19 +68,19 @@ public class CollectTweetsBRA extends HttpServlet
 		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/Twitter", "postgres", "anta200");
 		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/Twitter", "postgres", "agora");
 		    			
-		    			//System.out.println("Tweets_temp_bra");
+		    			//System.out.println("Tweets_temp_ger");
 		    			
 		    			// creating a statement
 	    				Statement sq_stmt4 = conn.createStatement();
-	    				String sql_str4  = "INSERT INTO tweets_temp_BRA (tweet_id, tweet_time, username, tweet_text, location) VALUES ("+status.getId()+", '"+
+	    				String sql_str4  = "INSERT INTO tweets_temp_GER (tweet_id, tweet_time, username, tweet_text, location) VALUES ("+status.getId()+", '"+
 	    						status.getCreatedAt()+"', '"+status.getUser().getScreenName()+"', '"+statusText+"', ST_SetSRID(ST_MakePoint("+
 	    						status.getGeoLocation().getLongitude()+","+status.getGeoLocation().getLatitude()+"), 4326));";
 						sq_stmt4.executeUpdate(sql_str4);
 						sq_stmt4.close();
 						conn.close();
 						
-						/* ****************** PERFORMANCE TRACKING ****************** */
-			            /*long middlEn = System.nanoTime();
+						 /* ****************** PERFORMANCE TRACKING ****************** */
+			           /* long middlEn = System.nanoTime();
 			            
 			            double x = Math.pow(10, -18);
 						double a = ((Long.parseLong(String.valueOf(middlEn)) - Long.parseLong(String.valueOf(middlSt))) / x);
@@ -88,7 +90,8 @@ public class CollectTweetsBRA extends HttpServlet
 						SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
 						String date = dt.format(Calendar.getInstance().getTime());           
 						
-						String line = "CollectTweetsBRA;" + date + ";" + middlSt + ";" + middlEn + ";" + (middlEn-middlSt) + ";" + a + ";" + status.getId() + ";";    
+						String line = "CollectTweetsGER;" + date + ";" + middlSt + ";" + middlEn + ";" + (middlEn-middlSt) + ";" +
+								 a + ";" + status.getId() + ";";    
 						
 						Common.updateTwitterPerformanceMeasurement(line);*/
 		    				
@@ -96,7 +99,7 @@ public class CollectTweetsBRA extends HttpServlet
 	    				    			
 	            } catch (Exception e) {
 	    			System.out.print("Erro Twitter-CollectTweets"+e.getStackTrace());
-	    		}             
+	    		}           
 	            
 	        }
 
@@ -135,11 +138,9 @@ public class CollectTweetsBRA extends HttpServlet
 	 // calculating bounding box
     	List<double[]> rowList = new ArrayList<double[]>();
     	
-    	double xmin = -53.183, ymin = -25.127, xmax = -44.0938,	ymax = -19.6895;
-
+    	double xmin = 4.50029, ymin = 47.191, xmax = 15.383, ymax = 54.9049;
+    	
 		double xmin_i, ymin_i, xmax_i, ymax_i;
-		
-		//double loc[][] = new double [50][2];
 		
 		for (int i=0; i<5;i++)
 			for (int j=0; j<5; j++)
@@ -159,13 +160,16 @@ public class CollectTweetsBRA extends HttpServlet
 	        loc[i][1] = rowList.get(i)[1];
 	    }
 	    
-	    // creates a new FilterQuery	    
-	    FilterQuery fq = new FilterQuery();
-      
-        twitterStream.addListener(listener);
-           
+	    // creates a new FilterQuery
+	    FilterQuery fq = new FilterQuery(); 
+            
+        // add a listener
+        twitterStream.addListener(listener);        
+       
+        // sets locations for the filter query
         fq.locations(loc);
 
+        // starts consuming public statuses that match one or more filter predicates
         twitterStream.filter(fq);
         
 	}
