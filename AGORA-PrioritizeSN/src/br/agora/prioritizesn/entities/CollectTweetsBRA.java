@@ -63,10 +63,6 @@ public class CollectTweetsBRA extends HttpServlet
 		    			
 		    			// connection to the database
 		    			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/Twitter", "postgres", "anta200");
-		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/Twitter", "postgres", "anta200");
-		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/Twitter", "postgres", "agora");
-		    			
-		    			//System.out.println("Tweets_temp_bra");
 		    			
 		    			// creating a statement
 	    				Statement sq_stmt4 = conn.createStatement();
@@ -78,7 +74,7 @@ public class CollectTweetsBRA extends HttpServlet
 						conn.close();
 						
 						/* ****************** PERFORMANCE TRACKING ****************** */
-			            /*long middlEn = System.nanoTime();
+						/* long middlEn = System.nanoTime();
 			            
 			            double x = Math.pow(10, -18);
 						double a = ((Long.parseLong(String.valueOf(middlEn)) - Long.parseLong(String.valueOf(middlSt))) / x);
@@ -88,7 +84,8 @@ public class CollectTweetsBRA extends HttpServlet
 						SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
 						String date = dt.format(Calendar.getInstance().getTime());           
 						
-						String line = "CollectTweetsBRA;" + date + ";" + middlSt + ";" + middlEn + ";" + (middlEn-middlSt) + ";" + a + ";" + status.getId() + ";";    
+						String line = "CollectTweetsGER;" + date + ";" + middlSt + ";" + middlEn + ";" + (middlEn-middlSt) + ";" +
+								 a + ";" + status.getId() + ";";    
 						
 						Common.updateTwitterPerformanceMeasurement(line);*/
 		    				

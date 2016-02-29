@@ -32,7 +32,6 @@ public class PrioritizedTweets_BRA extends HttpServlet
 	public void init() throws ServletException 
 	{	
 		try {
-			//System.out.println("Prioritization of Twitter in Brazil");
 			receiveTweets();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -71,13 +70,10 @@ public class PrioritizedTweets_BRA extends HttpServlet
 		    			
 		    			// connection to the database
             			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/SaoPauloPrioritization", "postgres", "anta200");
-            			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/SaoPauloPrioritization", "postgres", "anta200");
-		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/SaoPauloPrioritization", "postgres", "agora");
 		    			
 		    			if (conn != null)
 		    			{	    				
 		    				
-		    				//System.out.println("Prioritized Tweets Brazil connection open!");
 		    				// removing special characters of the status text in order to store into the database
 			    			String statusText = status.getText().replaceAll("'", " ");
 			    						    			
@@ -137,7 +133,6 @@ public class PrioritizedTweets_BRA extends HttpServlet
 				    			rs1.close();
 			    				sq_stmt1.close();
 			    				
-			    				//System.out.println("Twitter Brazil - "+status.getId());
 				    			/****************** INSERT THE TWEET AND ITS COMPONENTS INTO THE DATABASE **********************/
 				    			// if there is a flooded area, then insert every information of the tweet into the database
 				    			if (gid != null)
@@ -159,7 +154,6 @@ public class PrioritizedTweets_BRA extends HttpServlet
 							}
 									    				
 			    			conn.close();
-			    			//System.out.println("Prioritized Tweets Brazil connection closed!");
 		    			}
 		    			else
 		    				System.out.println("Prioritized Tweets Brazil - connection refused!!");
@@ -225,8 +219,6 @@ public class PrioritizedTweets_BRA extends HttpServlet
     	double xmin = -53.183, ymin = -25.127, xmax = -44.0938,	ymax = -19.6895;
 
 		double xmin_i, ymin_i, xmax_i, ymax_i;
-		
-		//double loc[][] = new double [50][2];
 		
 		for (int i=0; i<5;i++)
 			for (int j=0; j<5; j++)

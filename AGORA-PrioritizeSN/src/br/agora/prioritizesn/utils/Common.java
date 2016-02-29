@@ -40,39 +40,22 @@ import org.apache.http.protocol.HTTP;
 import org.json.simple.JSONValue;
 import org.w3c.dom.Document;
 
-/**
- * 
- * @author sam
- *
- */
 public class Common {
 
 	/**
 	 * 
 	 */
 	public final static String SERVER_PATH = "/usr/share/tomcat7/webapps/52nSOSv3/WEB-INF/conf/sensors/";
-//	public final static String SERVER_PATH = "E:\\Desenvolvimento\\Agora\\AgoraDSM\\docs\\";
-	//public final static String SERVER_PATH = "E:\\Desenvolvimento\\Agora\\AgoraDSM\\docs\\";
 	
-//	public final static String SOS_PATH = "http://www.agora.icmc.usp.br:8080/52nSOSv3/sos";
-  //public final static String SOS_PATH = "http://localhost:8080/52nSOSv3/sos";
-//	public final static String SOS_PATH = "http://localhost:8081/52nSOSv3/sos";
 	public final static String SOS_PATH = "http://localhost:8080/52nSOSv3/sos";
 	
 	public final static int SOS_52n_VERSION = 3;
 	
 	public final static String IMAGES_PATH = "/home/suporte/uavs/";
-	//public final static String IMAGES_PATH = "/home/ftpuser/uavs/";
-//	public final static String IMAGES_PATH = "E:\\Desenvolvimento\\Agora\\AgoraDSM\\docs\\";
 	
 	public final static String uavsTrackingFile = "/home/suporte/AGORADSM/performance-tracking.csv";
-//	public final static String uavsTrackingFile = "E:\\Desenvolvimento\\Agora\\AgoraDSM\\docs\\performance-tracking.csv";
-	//public final static String uavsTrackingFile = "C:\\performance-tracking.csv";
 	
 	public final static String twitterTrackingFile = "/home/suporte/AGORADSM/twitter-performance-tracking.csv";
-	//public final static String twitterTrackingFile = "/home/ftpagora/AgoraDSM/twitter-performance-tracking.csv";
-	//public final static String twitterTrackingFile = "E:\\Desenvolvimento\\Agora\\AgoraDSM\\docs\\twit-performance-tracking.csv";
-	//public final static String twitterTrackingFile = "C:\\Users\\temp\\twitter-performance-tracking.csv";
 	
 	/**
 	 * 
@@ -358,7 +341,6 @@ public class Common {
 			URL jsonPage = new URL(urlPage);
 			HttpURLConnection connection = (HttpURLConnection) jsonPage.openConnection();
 						
-			//System.out.println("response code = "+connection.getResponseCode());
 			// not found - 400
 			// response ok - 200
 			if (connection.getResponseCode() == 200)

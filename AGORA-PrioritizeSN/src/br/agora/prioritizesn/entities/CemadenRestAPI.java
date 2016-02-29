@@ -53,17 +53,11 @@ public class CemadenRestAPI extends HttpServlet
 	
 		try {
 			
-			//System.out.println("destroy");
-			
-			//System.out.println("Cemaden connection open!");
 			/************************** DATABASE CONNECTION **************************/			
 			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/SaoPauloPrioritization", "postgres", "anta200");
-			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/SaoPauloPrioritization", "postgres", "anta200");
-			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/SaoPauloPrioritization", "postgres", "agora");
-			
+						
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
-			//System.out.println(dateFormat.format(date));
 			
 			Statement sq_stmt1 = conn.createStatement();	
 			String sql_str1 = "UPDATE flooded_areas SET flooded_final_time='"+dateFormat.format(date)+"' WHERE flooded_final_time is NULL;";
@@ -91,8 +85,6 @@ public class CemadenRestAPI extends HttpServlet
 			
 			try {
 			
-				//System.out.println("Cemaden Stations");
-				
 				/************************** VARIABLES INITIALIZATION **************************/
 						
 				String codestacao = null, cidade = null, nome = null, nivel = null, tipo = null, uf = null, dataHora = null;
@@ -102,14 +94,12 @@ public class CemadenRestAPI extends HttpServlet
 				// defining the federal units
 				//StringTokenizer siglasEstados = new StringTokenizer("AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO");
 				StringTokenizer siglasEstados = new StringTokenizer("SP");
-				//StringTokenizer siglasEstados = new StringTokenizer("PR RS SC SP");
 				
-				//Loop principal que percorre todos as siglas dos estados brasileiros.
-				
+				//Main loop for all the Brazilian states				
 				while(siglasEstados.hasMoreTokens()) 
 				{
 		
-					//Leitura do arquivo JSON em uma pagina web, correspondente ao Estado atual.
+					// Reading json in a web page
 					JSONObject jsonPluviometer = (JSONObject) Common.URLjsonToObject("http://150.163.255.240/CEMADEN/resources/parceiros/" + siglasEstados.nextToken() + "/1");
 					
 					if (jsonPluviometer != null)
@@ -120,13 +110,10 @@ public class CemadenRestAPI extends HttpServlet
 						
 						/************************** DATABASE CONNECTION **************************/		
 						Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/SaoPauloPrioritization", "postgres", "anta200");
-					    //Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/SaoPauloPrioritization", "postgres", "anta200");
-						//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/SaoPauloPrioritization", "postgres", "agora");
-						
+					    
 						if (conn != null)
 						{
-							//Loop interno que percorre todos os pluviometros daquele Estado,
-							//efetuando o parsing dos dados.
+							// Main loop for all the parsing the pluviomether data
 							while(all_measurements.hasNext())
 					        {
 								
@@ -165,14 +152,12 @@ public class CemadenRestAPI extends HttpServlet
 										dataHora = pluviometer.get("dataHora").toString();
 									
 									// verifying if station is already within the database
-									//System.out.println("Cemaden Result Set1 open!");
 									Statement sq_stmt1 = conn.createStatement();	
 									String sql_str1 = "SELECT * FROM stations WHERE id = '"+codestacao+"'";
 									ResultSet rs1 = sq_stmt1.executeQuery(sql_str1);
 									boolean station_isDatabase = rs1.next();
 									rs1.close();
 									sq_stmt1.close();
-									//System.out.println("Cemaden Result Set1 close!");
 								
 									if (!station_isDatabase)
 									{
@@ -180,7 +165,6 @@ public class CemadenRestAPI extends HttpServlet
 										String sql_str3;
 										
 										/************************** SELECT CATCHMENT GID WHICH THIS STATION BELONGS TO **************************/
-										//System.out.println("Cemaden Result Set2 open!");
 										Statement sq_stmt2 = conn.createStatement();
 										String sql_str2 = "SELECT gid FROM catchments WHERE ST_WITHIN(ST_SetSRID(ST_MakePoint("+longitude+","+latitude+"), 4326), ST_TRANSFORM(area, 4326));";
 										ResultSet rs2 = sq_stmt2.executeQuery(sql_str2);
@@ -195,50 +179,32 @@ public class CemadenRestAPI extends HttpServlet
 										// close result set and statement
 										rs2.close();
 										sq_stmt2.close();						
-										//System.out.println("Cemaden Result Set2 close!");
 										
 										// execute one of the sql string
-										//System.out.println("Cemaden SQ_STMT3 open!");
 										Statement sq_stmt3 = conn.createStatement();
 										sq_stmt3.executeUpdate(sql_str3);
 										sq_stmt3.close();
-										//System.out.println("Cemaden Station - "+nome);
-										//System.out.println("Cemaden SQ_STMT3 close!");				
 										
 									}
 								
-									// close result set and statement
-									//rs1.close();
-									//sq_stmt1.close();
-									//
-									
-									//System.out.println("station was already inserted!");
-									
 									// verifying if measurement is already within the database
-									//System.out.println("Cemaden Result Set0 open!");
 									Statement sq_stmt0 = conn.createStatement();	
 									String sql_str0 = "SELECT * FROM measurements WHERE stations_id = '"+codestacao+"' AND time_stamp = '"+dataHora+"';";
 									ResultSet rs0 = sq_stmt0.executeQuery(sql_str0);
 									boolean measurement_isDatabase = rs0.next();
 									rs0.close();
 									sq_stmt0.close();
-									//System.out.println("Cemaden Result Set0 close!");
 								
 									if (!measurement_isDatabase)
 									{
 										
-										//System.out.println("Cemaden - Measurement : "+codestacao+" timestamp: "+dataHora);
 										/************************** INSERT JSON STATION MEASUREMENT VALUES INTO THE DATABASE **************************/															
-										//System.out.println("Cemaden SQ_STMT4 open!");
 										Statement sq_stmt4 = conn.createStatement();
 										String sql_str4 = "INSERT INTO measurements (stations_id, shortname, time_stamp, value, stateMnwMhw) VALUES ('"+codestacao+"','"+nome+"','"+dataHora+"',"+chuva+",'"+nivel+"');";
 										sq_stmt4.executeUpdate(sql_str4);			
 										sq_stmt4.close();
-										//System.out.println("Cemaden SQ_STMT4 close!");
-										//System.out.println("Cemaden Measurements - "+nome+" "+dataHora);										
 										
 										/************************** SEARCH FOR THE CATCHMENTS_GID OF THE STATION WHICH IS MEASURING **************************/
-										//System.out.println("Cemaden Result Set6 open!");
 										Statement sq_stmt6 = conn.createStatement();
 										String sql_str6 = "SELECT catchments_gid FROM stations WHERE stations.id = '"+codestacao+"';";
 										ResultSet rs6 = sq_stmt6.executeQuery(sql_str6);
@@ -246,13 +212,11 @@ public class CemadenRestAPI extends HttpServlet
 										/************************** VERIFY IF THE STATION IS MEASURING A HIGH VALUE == FLOOD!!! **************************/
 										if(rs6.next())
 										{
-											//System.out.println("Cemaden Measurements - There is a catchment to "+nome);
 											
 											if (chuva > 3)
 											{							
 												
 												/************************** VERIFY IF EXISTS FLOOD RELATED TO THIS STATION WITHIN THE DATABASE **************************/
-												//System.out.println("Cemaden Result Set5 open!");
 												Statement sq_stmt5 = conn.createStatement();
 												String sql_str5 = "SELECT * FROM flooded_areas, stations WHERE '"+codestacao+"' = stations.id AND stations.catchments_gid = flooded_areas.catchments_gid AND flooded_areas.flooded_final_time is NULL;";
 												ResultSet rs5 = sq_stmt5.executeQuery(sql_str5);
@@ -260,20 +224,14 @@ public class CemadenRestAPI extends HttpServlet
 												rs5.close();
 												sq_stmt5.close();
 												
-												//System.out.println("Cemaden Measurements - Raining more than 3 in "+nome);
-												
-												
 												// if there is no current flood then insert that into the database
 												if (!station_isFlooded)
 												{
 													// initiating the flood within a row using the catchments_gid above and the started time measured
-													//System.out.println("Cemaden Measurements - There is a flood in "+rs6.getString("catchments_gid"));
 													Statement sq_stmt7 = conn.createStatement();
 													String sql_str7 = "INSERT INTO flooded_areas (catchments_gid, flooded_initial_time) VALUES ('"+rs6.getString("catchments_gid")+"', '"+dataHora+"')";
 													sq_stmt7.executeUpdate(sql_str7);	
 													sq_stmt7.close();
-													//System.out.println("Cemaden SQ_STMT7 close!");
-													//System.out.println("Cemaden - create flooded area catchment: "+rs6.getString("catchments_gid")+" timestamp initial: "+dataHora);
 												}
 												
 											}
@@ -288,14 +246,11 @@ public class CemadenRestAPI extends HttpServlet
 												rs8.close();
 												sq_stmt8.close();
 												
-												//System.out.println("Cemaden Measurements - Raining less than 3 in "+nome);
-																									
 												// if the flood is done by another stations
 												if (!catchment_hasAnotherStation)
 												{
 													
 													/************************** VERIFY IF EXISTS FLOOD RELATED TO THIS STATION WITHIN THE DATABASE **************************/
-													//System.out.println("Cemaden Result Set5 open!");
 													Statement sq_stmt5 = conn.createStatement();
 													String sql_str5 = "SELECT * FROM flooded_areas, stations WHERE '"+codestacao+"' = stations.id AND stations.catchments_gid = flooded_areas.catchments_gid AND flooded_areas.flooded_final_time is NULL;";
 													ResultSet rs5 = sq_stmt5.executeQuery(sql_str5);
@@ -303,19 +258,14 @@ public class CemadenRestAPI extends HttpServlet
 													rs5.close();
 													sq_stmt5.close();
 													
-													//System.out.println("Cemaden Measurements - There is an existing flooded area for where is "+nome);														
-													
-													
 													// if there is no current flood then insert that into the database
 													if (station_isFlooded)
 													{
 														// finalizing the flood within a row using the the finished time measured
-														//System.out.println("Cemaden Measurements - There is not anymore a flood in "+rs6.getString("catchments_gid"));
 														Statement sq_stmt7 = conn.createStatement();
 														String sql_str7 = "UPDATE flooded_areas SET flooded_final_time = '"+dataHora+"' WHERE catchments_gid = '"+rs6.getString("catchments_gid")+"' AND flooded_final_time is NULL;";
 														sq_stmt7.executeUpdate(sql_str7);
 														sq_stmt7.close();
-														//System.out.println("Cemaden - terminate flooded area catchment: "+rs6.getString("catchments_gid")+" timestamp final: "+dataHora);
 													}
 												}
 											
@@ -326,11 +276,6 @@ public class CemadenRestAPI extends HttpServlet
 										// close result set and statement
 										rs6.close();
 										sq_stmt6.close();
-										//System.out.println("Cemaden Result Set6 close!");
-										
-										//rs5.close();
-										//sq_stmt5.close();
-										//System.out.println("Cemaden Result Set5 close!");
 					
 									}
 									
@@ -343,8 +288,6 @@ public class CemadenRestAPI extends HttpServlet
 					
 							// close connection
 							conn.close();
-							//System.out.println("Cemaden connection close!");
-													
 						}
 						else
 							System.out.println("Cemaden - connection refused!");
