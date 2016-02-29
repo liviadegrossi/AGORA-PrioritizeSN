@@ -64,20 +64,15 @@ public class PegelonlineRestAPI extends HttpServlet
 			
 			/************************** DATABASE CONNECTION **************************/			
 			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/GermanyPrioritization", "postgres", "anta200");
-			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "anta200");
-			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "agora");
 			
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
-			//System.out.println(dateFormat.format(date));
 		
-			//System.out.println("Pegelonline destroy open!"); 
 			Statement sq_stmt1 = conn.createStatement();	
 			String sql_str1 = "UPDATE flooded_areas SET flooded_final_time='"+dateFormat.format(date)+"' WHERE flooded_final_time is NULL;";
 			sq_stmt1.executeUpdate(sql_str1);
 			sq_stmt1.close();
 			conn.close();
-			//System.out.println("Pegelonline destroy close!");
 				
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -101,8 +96,6 @@ public class PegelonlineRestAPI extends HttpServlet
 			try
 			{	
 			
-				//System.out.println("Stations - Pegelonline");
-				
 				/************************** READ JSON PAGE **************************/		
 				
 				Object jsonStation = Common.URLjsonToObject("http://www.pegelonline.wsv.de/webservices/rest-api/v2/stations.json");
@@ -114,14 +107,10 @@ public class PegelonlineRestAPI extends HttpServlet
 								
 					/************************** DATABASE CONNECTION **************************/
 					Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/GermanyPrioritization", "postgres", "anta200");
-					//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "anta200");
-					//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "agora");
 					
 					if (conn != null)
 	    			{
 					
-						//System.out.println("Pegelonline Stations connection open!"); 
-						
 						/************************** VARIABLES INITIALIZATION **************************/
 						
 						int count = 0;		
@@ -145,8 +134,6 @@ public class PegelonlineRestAPI extends HttpServlet
 							if (station.get("uuid") != null)
 								uuid = station.get("uuid").toString();
 							
-							//System.out.println("Pegelonline Stations Result Set0 connection open!");
-							
 							// verifying if station is already within the database
 							Statement sq_stmt0 = conn.createStatement();	
 							String sql_str0 = "SELECT * FROM stations WHERE id = '"+uuid+"'";
@@ -154,12 +141,9 @@ public class PegelonlineRestAPI extends HttpServlet
 							boolean station_isDatabase = rs0.next();
 							rs0.close();
 							sq_stmt0.close();
-							//System.out.println("Pegelonline Stations Result Set0 connection close!");
 							
 							if (!station_isDatabase)
 							{						
-								
-								//System.out.println("Pegelonline Stations - station "+uuid);
 								
 								// if json station contains number
 								if (station.get("number") != null)
@@ -203,10 +187,10 @@ public class PegelonlineRestAPI extends HttpServlet
 									lon = Double.parseDouble(station.get("longitude").toString());
 																
 									/************************** SELECT CATCHMENT GID WHICH THIS STATION BELONGS TO **************************/
-									//System.out.println("Pegelonline Stations Result Set2 connection open!");
 									Statement sq_stmt2 = conn.createStatement();
 									String sql_str2 = "SELECT gid FROM catchments WHERE ST_WITHIN(ST_SetSRID(ST_MakePoint("+lon+","+lat+"), 4326), ST_TRANSFORM(area, 4326));";
 									ResultSet rs2 = sq_stmt2.executeQuery(sql_str2);											
+	
 									// station is inside one catchment
 									if (rs2.next()) 
 										// insert into the database all fields
@@ -218,22 +202,16 @@ public class PegelonlineRestAPI extends HttpServlet
 									// close result set and statement
 									rs2.close();
 									sq_stmt2.close();
-									//System.out.println("Pegelonline Stations Result Set2 connection close!");
 																
 								}
 								else
 									// insert the station into the database without latitude, longitude and associated catchment
 									sql_str = "INSERT INTO stations (id, number, shortname, longname, km, agency, water_shortname, water_longname) VALUES ('"+uuid+"',"+number+",'"+shortname+"','"+longname+"',"+km+",'"+agency+"','"+water_shortname+"','"+water_longname+"');";
 								
-								//System.out.println("Pegelonline Stations SQ_STMT connection open!");
 								// inserting station into the database
 								Statement sq_stmt = conn.createStatement();	
 								sq_stmt.executeUpdate(sql_str);
 								sq_stmt.close();
-								//System.out.println("Pegelonline Stations - "+shortname);
-								//System.out.println("Pegelonline Stations SQ_STMT connection close!");
-								
-							
 							}			
 							
 							// increment so the next station can be inserted 
@@ -243,7 +221,6 @@ public class PegelonlineRestAPI extends HttpServlet
 					
 						// close connection
 						conn.close();
-						//System.out.println("Pegelonline Stations connection close!");
 						
 						// waiting 1 hour to run again
 						Thread.sleep(3600000);
@@ -274,8 +251,6 @@ public class PegelonlineRestAPI extends HttpServlet
 			
 			try 
 			{
-				//System.out.println("Measurements - Pegelonline");
-				
 				/************************** READ JSON PAGE **************************/		
 				
 				Object jsonStation = Common.URLjsonToObject("http://www.pegelonline.wsv.de/webservices/rest-api/v2/stations.json");
@@ -288,14 +263,10 @@ public class PegelonlineRestAPI extends HttpServlet
 					
 					/************************** DATABASE CONNECTION **************************/
 					Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/GermanyPrioritization", "postgres", "anta200");
-					//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "anta200");			
-					//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "agora");
 					
 					if (conn != null)
 	    			{
 					
-						//System.out.println("Pegelonline Measurements connection open!");					
-						
 						// variables initialization
 						String URL_name_station, URL_encoded;
 										
@@ -315,8 +286,6 @@ public class PegelonlineRestAPI extends HttpServlet
 								URL_encoded = URL_encoded.replaceAll("�", "%C3%B6");
 								URL_encoded = URL_encoded.replaceAll("�", "%C3%A4");
 								URL_encoded = URL_encoded.replaceAll("-", "%2D");								
-								
-								//System.out.println("shortname begin: "+URL_name_station);
 								
 								// transform URL json page into an jsonObject
 								Object objectMeasurement = Common.URLjsonToObject("http://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/"+URL_encoded+"/W/currentmeasurement.json");
@@ -350,30 +319,23 @@ public class PegelonlineRestAPI extends HttpServlet
 											stateNswHsw = jsonMeasurement.get("stateNswHsw").toString();
 										
 										// verifying if measurement is already within the database
-										//System.out.println("Pegelonline Measurements Result Set0 connection open!");
 										Statement sq_stmt0 = conn.createStatement();	
 										String sql_str0 = "SELECT * FROM measurements WHERE stations_id = '"+id+"' AND time_stamp = '"+time_stamp+"';";
 										ResultSet rs0 = sq_stmt0.executeQuery(sql_str0);
 										boolean measurement_isDatabase = rs0.next();
 										rs0.close();
 										sq_stmt0.close();
-										//System.out.println("Pegelonline Measurements Result Set0 connection close!");
 										
 										if (!measurement_isDatabase)
 										{
 											
 											/************************** INSERT JSON STATION MEASUREMENT VALUES INTO THE DATABASE **************************/															
-											//System.out.println("Pegelonline Measurements SQ_STMT2 connection open!");
-											//System.out.println("Pegelonline Measurements - shortname begin: "+URL_name_station);
 											Statement sq_stmt2 = conn.createStatement();
 											String sql_str2 = "INSERT INTO measurements (stations_id, shortname, time_stamp, value, stateMnwMhw, stateNswHsw) VALUES ('"+id+"','"+URL_name_station+"','"+time_stamp+"',"+value+",'"+stateMnwMhw+"','"+stateNswHsw+"');";
 											sq_stmt2.executeUpdate(sql_str2);			
 											sq_stmt2.close();
-											//System.out.println("Pegelonline Measurements SQ_STMT2 connection close!");
-											//System.out.println("Pegelonline Measurements - "+URL_name_station+" "+time_stamp);
 																			
 											/************************** SEARCH FOR THE CATCHMENTS_GID OF THE STATION WHICH IS MEASURING **************************/
-											//System.out.println("Pegelonline Measurements Result Set4 connection open!");
 											Statement sq_stmt4 = conn.createStatement();
 											String sql_str4 = "SELECT catchments_gid FROM stations WHERE stations.id = '"+id+"';";
 											ResultSet rs4 = sq_stmt4.executeQuery(sql_str4);
@@ -381,12 +343,9 @@ public class PegelonlineRestAPI extends HttpServlet
 											/************************** VERIFY IF THE STATION IS MEASURING A HIGH VALUE == FLOOD!!! **************************/
 											if(rs4.next())
 											{
-												//System.out.println("Pegelonline Measurements - There is a catchment to "+URL_name_station);
-												
 												if (stateMnwMhw.equals("high"))
 												{			
 													/************************** VERIFY IF EXISTS FLOOD RELATED TO THIS STATION WITHIN THE DATABASE **************************/
-													//System.out.println("Pegelonline Measurements Result Set3 connection open!");
 													Statement sq_stmt3 = conn.createStatement();
 													String sql_str3 = "SELECT * FROM flooded_areas, stations WHERE '"+id+"' = stations.id AND stations.catchments_gid = flooded_areas.catchments_gid AND flooded_areas.flooded_final_time is NULL;";
 													ResultSet rs3 = sq_stmt3.executeQuery(sql_str3);
@@ -394,18 +353,14 @@ public class PegelonlineRestAPI extends HttpServlet
 													rs3.close();
 													sq_stmt3.close();
 													
-													//System.out.println("Pegelonline Measurements - High level in "+URL_name_station);
 													// if there is no current flood then insert that into the database
 													if (!station_isFlooded)
 													{
 														// initiating the flood within a row using the catchments_gid above and the started time measured
-														//System.out.println("Pegelonline Measurements SQ_STMT5 connection open!");
-														//System.out.println("Pegelonline Measurements - There is a flood in "+rs4.getString("catchments_gid"));
 														Statement sq_stmt5 = conn.createStatement();
 														String sql_str5 = "INSERT INTO flooded_areas (catchments_gid, flooded_initial_time) VALUES ('"+rs4.getString("catchments_gid")+"', '"+time_stamp+"')";
 														sq_stmt5.executeUpdate(sql_str5);
 														sq_stmt5.close();
-														//System.out.println("Pegelonline Measurements - create flooded area catchment: "+rs4.getString("catchments_gid")+" timestamp initial: "+time_stamp);
 													}										
 												}
 												else
@@ -419,14 +374,11 @@ public class PegelonlineRestAPI extends HttpServlet
 													rs7.close();
 													sq_stmt7.close();
 													
-													//System.out.println("Pegelonline Measurements - Low|Medium level in "+URL_name_station);
-																										
 													// if the flood is done by another stations
 													if (!catchment_hasAnotherStation)
 													{
 														
 														/************************** VERIFY IF EXISTS FLOOD RELATED TO THIS STATION WITHIN THE DATABASE **************************/
-														//System.out.println("Pegelonline Measurements Result Set3 connection open!");
 														Statement sq_stmt3 = conn.createStatement();
 														String sql_str3 = "SELECT * FROM flooded_areas, stations WHERE '"+id+"' = stations.id AND stations.catchments_gid = flooded_areas.catchments_gid AND flooded_areas.flooded_final_time is NULL;";
 														ResultSet rs3 = sq_stmt3.executeQuery(sql_str3);
@@ -434,19 +386,14 @@ public class PegelonlineRestAPI extends HttpServlet
 														rs3.close();
 														sq_stmt3.close();
 														
-														//System.out.println("Pegelonline Measurements - There is an existing flooded area for where is "+URL_name_station);
-														
 														// if there is no current flood then insert that into the database
 														if (station_isFlooded)
 														{
 															// finalizing the flood within a row using the the finished time measured
-															//System.out.println("Pegelonline Measurements SQ_STMT5 connection open!");
-															//System.out.println("Pegelonline Measurements - There is not anymore a flood in "+rs4.getString("catchments_gid"));
 															Statement sq_stmt5 = conn.createStatement();
 															String sql_str5 = "UPDATE flooded_areas SET flooded_final_time = '"+time_stamp+"' WHERE catchments_gid = '"+rs4.getString("catchments_gid")+"' AND flooded_final_time is NULL;";
 															sq_stmt5.executeUpdate(sql_str5);
 															sq_stmt5.close();
-															//System.out.println("Pegelonline Measurements - terminate flooded area catchment: "+rs4.getString("catchments_gid")+" timestamp final: "+time_stamp);
 														}
 													}
 												}
@@ -455,12 +402,6 @@ public class PegelonlineRestAPI extends HttpServlet
 											// close result set and statement
 											rs4.close();
 											sq_stmt4.close();
-											//System.out.println("Pegelonline Measurements Result Set4 connection close!");
-											
-											// close result set and statement
-											//rs3.close();
-											//sq_stmt3.close();
-											//System.out.println("Pegelonline Measurements Result Set3 connection close!");									
 											
 										}							
 																	

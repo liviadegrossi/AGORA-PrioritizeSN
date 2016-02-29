@@ -31,7 +31,6 @@ public class PrioritizedTweets_GER extends HttpServlet
 	public void init() throws ServletException 
 	{	
 		try {
-			//System.out.println("Prioritization of Twitter in Germany");
 			receiveTweet();			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -63,7 +62,7 @@ public class PrioritizedTweets_GER extends HttpServlet
 	    		{	            	
 	        		
 	        		/* ****************** PERFORMANCE TRACKING ****************** */
-		        	long middlSt =  System.nanoTime();
+		        	//long middlSt =  System.nanoTime();
 					
 	        		try {
 	            		
@@ -71,12 +70,9 @@ public class PrioritizedTweets_GER extends HttpServlet
 		    			
 		    			// connection to the database		    			
 	        			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/GermanyPrioritization", "postgres", "anta200");
-	        			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "anta200");
-		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/GermanyPrioritization", "postgres", "agora");
 		    			
 		    			if (conn != null)
 		    			{
-		    				//System.out.println("Prioritized Tweets Germany connection open!");
 		    				// removing special characters of the status text to store into the database
 			    			String statusText = status.getText().replaceAll("'", " ");		    			
 		    				
@@ -134,7 +130,6 @@ public class PrioritizedTweets_GER extends HttpServlet
 			    				
 				    			/****************** INSERT THE TWEET AND ITS COMPONENTS INTO THE DATABASE **********************/
 				    			// if there is a flooded area, then insert every information of the tweet into the database
-			    				//System.out.println("Twitter Germany - "+status.getId());
 				    			if (!gid.isEmpty())
 				    			{
 				    				Statement sq_stmt3 = conn.createStatement();
@@ -154,7 +149,6 @@ public class PrioritizedTweets_GER extends HttpServlet
 							}
 							
 							conn.close();
-			    			//System.out.println("Prioritized Tweets Germany connection closed!");
 			    	
 		    			}
 		    			else

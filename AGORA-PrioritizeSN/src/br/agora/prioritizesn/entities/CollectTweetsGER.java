@@ -79,7 +79,7 @@ public class CollectTweetsGER extends HttpServlet
 						sq_stmt4.close();
 						conn.close();
 						
-						 /* ****************** PERFORMANCE TRACKING ****************** */
+					   // ****************** PERFORMANCE TRACKING ****************** 
 			           /* long middlEn = System.nanoTime();
 			            
 			            double x = Math.pow(10, -18);
