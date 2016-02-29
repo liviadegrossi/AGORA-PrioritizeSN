@@ -40,11 +40,6 @@ import org.apache.http.protocol.HTTP;
 import org.json.simple.JSONValue;
 import org.w3c.dom.Document;
 
-/**
- * 
- * @author sam
- *
- */
 public class Common {
 
 	/**
