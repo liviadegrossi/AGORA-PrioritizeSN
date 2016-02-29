@@ -65,8 +65,6 @@ public class CollectTweetsGER extends HttpServlet
 		    			
 		    			// connection to the database
 		    			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/Twitter", "postgres", "anta200");
-		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/Twitter", "postgres", "anta200");
-		    			//Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5432/Twitter", "postgres", "agora");
 		    			
 		    			//System.out.println("Tweets_temp_ger");
 		    			
