@@ -54,7 +54,7 @@ public class CemadenRestAPI extends HttpServlet
 		try {
 			
 			/************************** DATABASE CONNECTION **************************/			
-			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/SaoPauloPrioritization", "postgres", "anta200");
+			Connection conn = Common.dbConnection(database, user, password);
 						
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
