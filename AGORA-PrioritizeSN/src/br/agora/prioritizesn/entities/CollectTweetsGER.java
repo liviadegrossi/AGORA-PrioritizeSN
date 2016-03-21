@@ -64,7 +64,7 @@ public class CollectTweetsGER extends HttpServlet
 		    			String statusText = status.getText().replaceAll("'", " ");
 		    			
 		    			// connection to the database
-		    			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/Twitter", "postgres", "anta200");
+		    			Connection conn = Common.dbConnection(database, user, password);
 		    			
 		    			//System.out.println("Tweets_temp_ger");
 		    			
