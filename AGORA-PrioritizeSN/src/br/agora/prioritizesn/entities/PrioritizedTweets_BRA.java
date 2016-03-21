@@ -69,7 +69,7 @@ public class PrioritizedTweets_BRA extends HttpServlet
 	            		/****************** VERIFY THE SMALLEST DISTANCE BETWEEN THIS TWEET AND A FLOODED AREA **********************/
 		    			
 		    			// connection to the database
-            			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/SaoPauloPrioritization", "postgres", "anta200");
+            			Connection conn = Common.dbConnection(database, user, password);
 		    			
 		    			if (conn != null)
 		    			{	    				
