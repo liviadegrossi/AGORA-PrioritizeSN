@@ -63,7 +63,7 @@ public class PegelonlineRestAPI extends HttpServlet
 		try {
 			
 			/************************** DATABASE CONNECTION **************************/			
-			Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/GermanyPrioritization", "postgres", "anta200");
+			Connection conn = Common.dbConnection(database, user, password);
 			
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
@@ -106,7 +106,7 @@ public class PegelonlineRestAPI extends HttpServlet
 					JSONArray array = (JSONArray)jsonStation;
 								
 					/************************** DATABASE CONNECTION **************************/
-					Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/GermanyPrioritization", "postgres", "anta200");
+					Connection conn = Common.dbConnection(database, user, password);
 					
 					if (conn != null)
 	    			{
@@ -262,7 +262,7 @@ public class PegelonlineRestAPI extends HttpServlet
 					Iterator <JSONObject> stations = array.listIterator();
 					
 					/************************** DATABASE CONNECTION **************************/
-					Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/GermanyPrioritization", "postgres", "anta200");
+					Connection conn = Common.dbConnection(database, user, password);
 					
 					if (conn != null)
 	    			{
