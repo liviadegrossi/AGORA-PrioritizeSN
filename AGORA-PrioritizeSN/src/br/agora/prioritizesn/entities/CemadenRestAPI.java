@@ -109,7 +109,7 @@ public class CemadenRestAPI extends HttpServlet
 						Iterator <JSONObject> all_measurements = array.listIterator();
 						
 						/************************** DATABASE CONNECTION **************************/		
-						Connection conn = Common.dbConnection("jdbc:postgresql://localhost:5433/SaoPauloPrioritization", "postgres", "anta200");
+						Connection conn = Common.dbConnection(database, user, password);
 					    
 						if (conn != null)
 						{
